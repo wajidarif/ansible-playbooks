@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become_user: root
+  tasks:
+
+  - name: Install epel-release
+    yum:
+      name: epel-release
+      state: absent
+
+  - name: Installing latest version of Apache
+    yum:
+      name: httpd
+      state: absent
+
+  - name: Add Port 80/tcp in firewall
+    firewalld:
+      port: 80/tcp
+      permanent: yes
+      state: disabled
+
+  - name: Add Port 80/udp in firewalld
+    firewalld:
+      port: 80/udp
+      permanent: yes
+      state: disabled
+
+  - name: Add Port 8080/tcp in firewalld
+    firewalld:
+      port: 8080/tcp
+      permanent: yes
+      state: disabled
+
+  - name: Add Port 8080/udp in firewalld
+    firewalld:
+      port: 8080/udp
+      permanent: yes
+      state: disabled
+
+  - name: Reload service firewalld
+    service:
+      name: firewalld
+      state: reloaded
