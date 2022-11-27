@@ -3,10 +3,10 @@
   hosts: [testing1]
   vars:
     users:
-      - sana
-      - mina
-      - hiba
-      - nyle
+      - user1
+      - user2
+      - user3
+      - user4
   tasks:
     - name: Creating users by calling variables
       user:
