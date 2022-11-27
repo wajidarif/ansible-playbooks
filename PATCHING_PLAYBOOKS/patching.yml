@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become_user: root
+  tasks:
+    - name: Clean repos and list
+      shell:
+        cmd: /usr/bin/yum clean all
+
+    - name: Upgrade all installed packages for CentOS
+      yum:
+        name: '*'
+        state: latest
+        
+    - name: REBOOT SERVERS
+      reboot:
+...        
