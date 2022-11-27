@@ -1,0 +1,10 @@
+---
+- hosts: [testing]
+  become_user: root
+  tasks:
+
+  - name: Create a user
+    user:
+      name: testuser1
+      state: present
+      generate_ssh_key: true

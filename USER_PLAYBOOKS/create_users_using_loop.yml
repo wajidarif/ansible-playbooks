@@ -1,0 +1,16 @@
+---
+- name: adding users with loops
+  hosts: [testing1]
+  vars:
+    users:
+      - sana
+      - mina
+      - hiba
+      - nyle
+  tasks:
+    - name: Creating users by calling variables
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ users }}"
+...
