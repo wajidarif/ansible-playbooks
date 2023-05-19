@@ -1,29 +1,30 @@
 ---
 - name: mount module demo
-  hosts: all
+  hosts: [ansible-server]
+  gather_facts: yes
   become: true
   vars:
-    mynfs: "10.0.0.250:/sharingnfs"
-    mountpoint: "/shared_data"
+    mynfs: "192.168.1.14:/backup"
+    mountpoint: "/nfs_share"
     permission: '0777'
-    myopts: 'rw,sync'
+    myopts: 'rw,sync,defaults,_netdev'
   tasks:
-    - name: utility present redhat-like
-      ansible.builtin.yum:
-        name:
-         - nfs-utils
-         - nfs4-acl-tools
-        state: present
-      when: ansible_os_family == 'RedHat'
+#    - name: utility present redhat-like
+#      ansible.builtin.yum:
+#        name:
+#         - nfs-utils
+#         - nfs4-acl-tools
+#        state: present
+#      when: ansible_os_family == 'CentOS'
 
-    - name: utility present debian-like
-      ansible.builtin.apt:
-        name:
-          - nfs-common
-          - nfs4-acl-tools
-        state: present
-      when: ansible_os_family == 'Debian'
-      
+#    - name: utility present debian-like
+#      ansible.builtin.apt:
+#        name:
+#          - nfs-common
+#          - nfs4-acl-tools
+#        state: present
+#      when: ansible_os_family == 'Debian'
+
     - name: check mountpoint exist
       ansible.builtin.file:
         path: "{{ mountpoint }}"
@@ -39,3 +40,4 @@
         fstype: nfs
         opts: "{{ myopts }}"
         state: mounted
+

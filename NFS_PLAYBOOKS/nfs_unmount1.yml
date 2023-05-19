@@ -1,0 +1,31 @@
+---
+- name: Unmounting NFS
+  hosts: [testing1]
+  gather_facts: yes
+  become: true
+  vars:
+    mynfs: "10.0.0.14:/backup/"
+    mountpoint: "/nfs_share"
+    permission: '0777'
+    myopts: 'rw,sync,defaults,_netdev'
+  tasks:
+    - name: Unmounting Shared Directory
+      ansible.posix.mount:
+        src: "{{ mynfs }}"
+        path: "{{ mountpoint }}"
+        fstype: nfs
+        opts: "{{ myopts }}"
+        state: unmounted
+
+    - name: Deleting Shared Directory
+      ansible.builtin.file:
+        path: "{{ mountpoint }}"
+        state: absent
+        mode: "{{ permission }}"
+        owner: root
+        group: root
+
+#    - name: remove /shared directory from nfs-server entry from /etc/fstab
+#      mount:
+#        path: 10.0.0.14:/backup /nfs_share nfs rw,sync,defaults,_netdev 0 0
+#        state: absent

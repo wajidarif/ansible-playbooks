@@ -1,0 +1,58 @@
+---
+- name: Install NFS-SERVER
+  hosts: [testing1]
+  gather_facts: yes
+  become_user: root
+  tasks:
+    - name: Update Epel-Release
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Stop NFS Service
+      service:
+        name: nfs
+        state: stopped
+
+    - name: Disable NFS Service
+      service:
+        name: nfs
+        enabled: no
+
+    - name: Uninstall PACKAGES
+      yum:
+        name: nfs-utils, nfs4-acl-tools
+        state: absent
+
+    - name: Remove Port 2049/tcp in firewall
+      firewalld:
+        port: 2049/tcp
+        permanent: yes
+        state: disabled
+
+    - name: Remove Port 2049/udp in firewalld
+      firewalld:
+        port: 2049/udp
+        permanent: yes
+        state: disabled
+
+    - name: Remove Port 111/tcp in firewalld
+      firewalld:
+        port: 111/tcp
+        permanent: yes
+        state: disabled
+
+    - name: Remove Port 111/udp in firewalld
+      firewalld:
+        port: 111/udp
+        permanent: yes
+        state: disabled
+
+    - name: Reload service firewalld
+      service:
+        name: firewalld
+        state: reloaded
+
+    - name: Change SELINUX mode to Permisive
+      shell:
+        cmd: setenforce 0
